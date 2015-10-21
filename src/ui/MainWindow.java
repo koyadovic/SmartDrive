@@ -1,39 +1,18 @@
 package ui;
 
 import core.SmartDrive;
+import core.SmartDriveFactory;
+import operations.FilesystemOperation;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-
 /**
- * Created by user on 20/10/15.
+ * Created by user on 21/10/15.
+ *
+ * Main window of the app. Here is were we will launch others windows like configuration ones, etc.
  */
-public class MainWindow {
-    private SmartDrive mApp;
-    private Display mDisplay;
-    private Shell mShell;
+public interface MainWindow {
 
-    public MainWindow(SmartDrive app){
-        this.mApp = app;
-        initUI();
-    }
-
-    private void initUI(){
-        mDisplay = new Display();
-        mShell = new Shell(mDisplay);
-
-        // llenar la ventana y establecer listeners de eventos
-
-        mShell.open();
-    }
-
-    public void runUI(){
-
-        while (!mShell.isDisposed()) {
-            if (!mDisplay.readAndDispatch()) {
-                mDisplay.sleep();
-            }
-        }
-        mDisplay.dispose();
-    }
+    void showFilesystemOperationInfo(FilesystemOperation operation);
+    void showProgressBar(FilesystemOperation operation, int current, int total);
 }

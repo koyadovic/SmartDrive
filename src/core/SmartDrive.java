@@ -1,41 +1,18 @@
 package core;
 
 import elements.FilesystemElement;
-import ui.MainWindow;
 
 import java.util.List;
 
 /**
- * Created by user on 20/10/15.
+ * Created by user on 21/10/15.
  */
-public class SmartDrive {
-    public SmartDrive(){
-        // leer la configuración .ini en %APPDATA%, si no existe SmartDrive directory, preguntarlo y guardar la configuración.
-    }
+public interface SmartDrive {
 
-    public static void main(String[] args) {
-        SmartDrive app = new SmartDrive();
-        MainWindow ui = new MainWindow(app);
-        ui.runUI();
-    }
+    List<FilesystemElement> getChildrenElements(FilesystemElement target);
+    void copyElement(FilesystemElement target, FilesystemElement destination);
+    void moveElement(FilesystemElement target, FilesystemElement destination);
+    void deleteElement(FilesystemElement target);
+    void createDirectory(String name);
 
-    public List<FilesystemElement> getChildrenElements(FilesystemElement target) {
-        return null;
-    }
-
-    public void copyElement(FilesystemElement target, FilesystemElement destination) {
-
-    }
-
-    public void moveElement(FilesystemElement target, FilesystemElement destination) {
-
-    }
-
-    public void deleteElement(FilesystemElement target) {
-
-    }
-
-    public void createDirectory(String name) {
-
-    }
 }

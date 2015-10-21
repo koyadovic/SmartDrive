@@ -23,6 +23,9 @@ public abstract class AbstractOperation implements FilesystemOperation {
         mObservers.remove(observer);
     }
 
+    /*
+     This three methods, can be called for the extended classes to notify to user interface some information.
+     */
     protected void notifyStart(){
         mStatus = FilesystemOperation.STATUS_STARTING;
 
