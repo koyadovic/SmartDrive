@@ -1,5 +1,7 @@
 package ui;
 
+import configuration.AppConfiguration;
+import configuration.Configuration;
 import core.SmartDrive;
 import core.SmartDriveFactory;
 import operations.FilesystemOperation;
@@ -14,10 +16,20 @@ public class MainWindowImpl implements MainWindow {
     private SmartDrive mApp;
     private Display mDisplay;
     private Shell mShell;
+    private Configuration mConfiguration;
 
     protected MainWindowImpl(Display display){
         // here we instantiate the Controller, our app.
         mApp = SmartDriveFactory.getAppInstance(this);
+
+        // get the Configuration object. Only Windows and Linux machines supported.
+        try {
+            mConfiguration = AppConfiguration.getConfiguration();
+
+        } catch (Exception e){
+            e.printStackTrace();
+            System.exit(1);
+        }
 
         mDisplay = display;
 
