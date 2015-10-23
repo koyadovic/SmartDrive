@@ -1,6 +1,7 @@
 package ui;
 
 import configuration.Configuration;
+import configuration.ConfigurationFactory;
 import core.SmartDrive;
 import core.SmartDriveFactory;
 import operations.FilesystemOperation;
@@ -18,12 +19,13 @@ public class MainWindowImpl implements MainWindow {
     private Configuration mConfiguration;
 
     protected MainWindowImpl(Display display){
+        mDisplay = display;
+
         // here we instantiate the Controller, our app.
         mApp = SmartDriveFactory.getAppInstance(this);
 
-
-
-        mDisplay = display;
+        // get de configuration
+        mConfiguration = ConfigurationFactory.getConfiguration();
 
         // create widgets and set listeners
         initUI();
