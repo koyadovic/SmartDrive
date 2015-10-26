@@ -24,8 +24,8 @@ public class MainWindowImpl implements MainWindow {
         // here we instantiate the Controller, our app.
         mApp = SmartDriveFactory.getAppInstance(this);
 
-        // get de configuration
-        mConfiguration = ConfigurationFactory.getConfiguration();
+        // get the configuration
+        mConfiguration = ConfigurationFactory.getConfiguration(this);
 
         // create widgets and set listeners
         initUI();
@@ -56,4 +56,13 @@ public class MainWindowImpl implements MainWindow {
 
     }
 
+    @Override
+    public void showErrorMessage(String title, String text) {
+
+    }
+
+    @Override
+    public void showInfoMessage(String title, String text) {
+
+    }
 }

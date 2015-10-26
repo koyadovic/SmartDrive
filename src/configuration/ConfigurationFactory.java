@@ -2,6 +2,7 @@ package configuration;
 
 import paths.Paths;
 import paths.PathsFactory;
+import ui.MainWindow;
 
 /**
  * Created by user on 22/10/15.
@@ -14,7 +15,7 @@ public class ConfigurationFactory {
 
     private ConfigurationFactory(){}
 
-    public static Configuration getConfiguration() {
+    public static Configuration getConfiguration(MainWindow mainWindow) {
         Paths paths = null;
 
         try {
@@ -25,7 +26,7 @@ public class ConfigurationFactory {
             System.exit(1);
         }
 
-        return new ConfigurationImpl(paths.getConfigurationFilePath());
+        return new ConfigurationImpl(mainWindow);
 
     }
 }

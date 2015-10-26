@@ -15,4 +15,7 @@ public interface MainWindow {
 
     void showFilesystemOperationInfo(FilesystemOperation operation);
     void showProgressBar(FilesystemOperation operation, int current, int total);
+    void showErrorMessage(String title, String text);
+    void showInfoMessage(String title, String text);
+
 }
