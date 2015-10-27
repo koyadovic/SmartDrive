@@ -4,6 +4,7 @@ package files;
  * Created by user on 27/10/15.
  */
 public class SmartDriveFile implements FileElement {
+    private final int mType = FileElement.TYPE_SMARTDRIVE;
 
     @Override
     public boolean isFile() {
@@ -16,8 +17,8 @@ public class SmartDriveFile implements FileElement {
     }
 
     @Override
-    public boolean isLocal() {
-        return false;
+    public int getType() {
+        return mType;
     }
 
     @Override

@@ -7,14 +7,15 @@ import fsmanager.ManagerOperation;
 import fsmanager.ManagerOperationBuilder;
 import ui.MainWindow;
 
-import java.util.List;
-
 /**
  * Created by user on 20/10/15.
  */
 public class SmartDriveImpl implements SmartDrive {
     private MainWindow mMainWindow;
     private FilesystemManager mManager;
+
+    private FileElement mCurrentLocalDirectory;
+    private FileElement mCurrentSmartDriveDirectory;
 
     protected SmartDriveImpl(MainWindow mainWindow){
         mMainWindow = mainWindow;
@@ -27,10 +28,7 @@ public class SmartDriveImpl implements SmartDrive {
     /*
      Here we must translate UI request into concrete FilesystemOperation's
      */
-    public FileElement[] getChildrenElements(FileElement target) {
-        return target.listFiles();
-    }
-
+    @Override
     public void copyFileElement(FileElement target, FileElement destination) {
         if(! destination.isDirectory())
             mMainWindow.showErrorMessage("Error", "Destination must be a directory");
@@ -39,6 +37,7 @@ public class SmartDriveImpl implements SmartDrive {
         mManager.operate(operation);
     }
 
+    @Override
     public void moveFileElement(FileElement target, FileElement destination) {
         if(!target.isFile() && destination.isFile())
             mMainWindow.showErrorMessage("Error", "Destination must be a directory");
@@ -47,6 +46,7 @@ public class SmartDriveImpl implements SmartDrive {
         mManager.operate(operation);
     }
 
+    @Override
     public void deleteFileElement(FileElement target) {
         if(target.exists()) {
             ManagerOperation operation = ManagerOperationBuilder.getDeleteOperation(target);
@@ -54,6 +54,7 @@ public class SmartDriveImpl implements SmartDrive {
         }
     }
 
+    @Override
     public void createDirectory(FileElement target) {
         if(!target.exists()) {
             ManagerOperation operation = ManagerOperationBuilder.getCreateDirectoryOperation(target);
@@ -62,7 +63,13 @@ public class SmartDriveImpl implements SmartDrive {
     }
 
     @Override
-    public FileElement getCurrentDirectory() {
-        return null;
+    public FileElement getCurrentLocalDirectory() {
+        return mCurrentLocalDirectory;
     }
+
+    @Override
+    public FileElement getCurrentSmartDriveDirectory() {
+        return mCurrentSmartDriveDirectory;
+    }
+
 }

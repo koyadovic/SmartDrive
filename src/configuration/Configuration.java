@@ -10,4 +10,5 @@ public interface Configuration {
     boolean isCreatedForTheFirstTime();
     String getSmartDriveRootPath();
     void setSmartDriveRootPath(String path);
+
 }

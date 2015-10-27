@@ -1,7 +1,7 @@
 package fsmanager;
 
-import filesystem.SmartDriveFS;
-import filesystem.SmartDriveFSFactory;
+import filesystem.FS;
+import filesystem.FSFactory;
 import ui.MainWindow;
 
 import java.util.Queue;
@@ -12,7 +12,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class FilesystemManagerImpl implements FilesystemManager, OperationObserver {
     private MainWindow mMainWindow;
-    private SmartDriveFS mSmartDriveFS;
 
     private final Queue<ManagerOperation> queue = new ConcurrentLinkedQueue<ManagerOperation>();
 
@@ -22,7 +21,6 @@ public class FilesystemManagerImpl implements FilesystemManager, OperationObserv
         Thread workerThread = new Thread(worker);
         workerThread.start();
 
-        mSmartDriveFS = SmartDriveFSFactory.getSmartDriveFS();
     }
 
     /*
