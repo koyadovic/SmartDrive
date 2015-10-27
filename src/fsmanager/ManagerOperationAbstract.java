@@ -1,14 +1,13 @@
-package operations;
+package fsmanager;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by user on 20/10/15.
  */
-public abstract class AbstractOperation implements FilesystemOperation {
-    private int mStatus = FilesystemOperation.STATUS_IDLE;
+public abstract class ManagerOperationAbstract implements ManagerOperation {
+    private int mStatus = ManagerOperation.STATUS_IDLE;
     private String mStatusText = "";
 
     private List<OperationObserver> mObservers = new ArrayList<>();
@@ -27,14 +26,14 @@ public abstract class AbstractOperation implements FilesystemOperation {
      This three methods, can be called for the extended classes to notify to user interface some information.
      */
     protected void notifyStart(){
-        mStatus = FilesystemOperation.STATUS_STARTING;
+        mStatus = ManagerOperation.STATUS_STARTING;
 
         for(OperationObserver o : mObservers)
             o.notifyStart(this);
     }
 
     protected void notifyProgress(int current, int total){
-        mStatus = FilesystemOperation.STATUS_WORKING;
+        mStatus = ManagerOperation.STATUS_WORKING;
 
         for(OperationObserver o : mObservers)
             o.notifyProgress(this, current, total);
@@ -42,7 +41,7 @@ public abstract class AbstractOperation implements FilesystemOperation {
 
 
     protected void notifyEnd(){
-        mStatus = FilesystemOperation.STATUS_FINALIZED;
+        mStatus = ManagerOperation.STATUS_FINALIZED;
 
         for(OperationObserver o : mObservers)
             o.notifyEnd(this);

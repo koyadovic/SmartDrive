@@ -1,6 +1,6 @@
 package core;
 
-import elements.FilesystemElement;
+import files.FileElement;
 
 import java.util.List;
 
@@ -9,10 +9,11 @@ import java.util.List;
  */
 public interface SmartDrive {
 
-    List<FilesystemElement> getChildrenElements(FilesystemElement target);
-    void copyElement(FilesystemElement target, FilesystemElement destination);
-    void moveElement(FilesystemElement target, FilesystemElement destination);
-    void deleteElement(FilesystemElement target);
-    void createDirectory(String name);
+    FileElement[] getChildrenElements(FileElement target);
+    void copyFileElement(FileElement target, FileElement destination);
+    void moveFileElement(FileElement target, FileElement destination);
+    void deleteFileElement(FileElement target);
+    void createDirectory(FileElement target);
+    FileElement getCurrentDirectory();
 
 }

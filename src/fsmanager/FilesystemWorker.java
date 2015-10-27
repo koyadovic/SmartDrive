@@ -1,6 +1,4 @@
-package filesystem;
-
-import operations.FilesystemOperation;
+package fsmanager;
 
 import java.util.Queue;
 
@@ -9,10 +7,10 @@ import java.util.Queue;
  */
 public class FilesystemWorker implements Runnable {
 
-    private final Queue<FilesystemOperation> mOperationQueue;
+    private final Queue<ManagerOperation> mOperationQueue;
     private final FilesystemManagerImpl mManager;
 
-    protected FilesystemWorker(FilesystemManagerImpl manager, Queue<FilesystemOperation> operationQueue){
+    protected FilesystemWorker(FilesystemManagerImpl manager, Queue<ManagerOperation> operationQueue){
         this.mOperationQueue = operationQueue;
         this.mManager = manager;
     }
@@ -35,7 +33,7 @@ public class FilesystemWorker implements Runnable {
 
     private void consume() {
         while (!mOperationQueue.isEmpty()) {
-            FilesystemOperation op = mOperationQueue.poll();
+            ManagerOperation op = mOperationQueue.poll();
 
             if (op != null) {
                 // do it and publish the start, progress and end to manager but only if the operation requires it ...

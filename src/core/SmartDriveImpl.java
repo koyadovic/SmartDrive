@@ -1,8 +1,10 @@
 package core;
 
-import elements.FilesystemElement;
-import filesystem.FilesystemManager;
-import filesystem.FilesystemManagerFactory;
+import files.FileElement;
+import fsmanager.FilesystemManager;
+import fsmanager.FilesystemManagerFactory;
+import fsmanager.ManagerOperation;
+import fsmanager.ManagerOperationBuilder;
 import ui.MainWindow;
 
 import java.util.List;
@@ -25,23 +27,42 @@ public class SmartDriveImpl implements SmartDrive {
     /*
      Here we must translate UI request into concrete FilesystemOperation's
      */
-    public List<FilesystemElement> getChildrenElements(FilesystemElement target) {
+    public FileElement[] getChildrenElements(FileElement target) {
+        return target.listFiles();
+    }
+
+    public void copyFileElement(FileElement target, FileElement destination) {
+        if(! destination.isDirectory())
+            mMainWindow.showErrorMessage("Error", "Destination must be a directory");
+
+        ManagerOperation operation = ManagerOperationBuilder.getCopyOperation(target, destination);
+        mManager.operate(operation);
+    }
+
+    public void moveFileElement(FileElement target, FileElement destination) {
+        if(!target.isFile() && destination.isFile())
+            mMainWindow.showErrorMessage("Error", "Destination must be a directory");
+
+        ManagerOperation operation = ManagerOperationBuilder.getMoveOperation(target, destination);
+        mManager.operate(operation);
+    }
+
+    public void deleteFileElement(FileElement target) {
+        if(target.exists()) {
+            ManagerOperation operation = ManagerOperationBuilder.getDeleteOperation(target);
+            mManager.operate(operation);
+        }
+    }
+
+    public void createDirectory(FileElement target) {
+        if(!target.exists()) {
+            ManagerOperation operation = ManagerOperationBuilder.getCreateDirectoryOperation(target);
+            mManager.operate(operation);
+        }
+    }
+
+    @Override
+    public FileElement getCurrentDirectory() {
         return null;
-    }
-
-    public void copyElement(FilesystemElement target, FilesystemElement destination) {
-
-    }
-
-    public void moveElement(FilesystemElement target, FilesystemElement destination) {
-
-    }
-
-    public void deleteElement(FilesystemElement target) {
-
-    }
-
-    public void createDirectory(String name) {
-
     }
 }

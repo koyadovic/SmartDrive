@@ -1,9 +1,9 @@
-package operations;
+package fsmanager;
 
 /**
  * Created by user on 20/10/15.
  */
-public interface FilesystemOperation {
+public interface ManagerOperation {
     int STATUS_IDLE         = 0;
     int STATUS_STARTING     = 1;
     int STATUS_WORKING      = 2;

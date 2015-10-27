@@ -1,7 +1,7 @@
-package filesystem;
+package fsmanager;
 
-import operations.FilesystemOperation;
-import operations.OperationObserver;
+import filesystem.SmartDriveFS;
+import filesystem.SmartDriveFSFactory;
 import ui.MainWindow;
 
 import java.util.Queue;
@@ -12,21 +12,24 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class FilesystemManagerImpl implements FilesystemManager, OperationObserver {
     private MainWindow mMainWindow;
+    private SmartDriveFS mSmartDriveFS;
 
-    private final Queue<FilesystemOperation> queue = new ConcurrentLinkedQueue<FilesystemOperation>();
+    private final Queue<ManagerOperation> queue = new ConcurrentLinkedQueue<ManagerOperation>();
 
     protected FilesystemManagerImpl(MainWindow mainWindow){
         mMainWindow = mainWindow;
         FilesystemWorker worker = new FilesystemWorker(this, queue); // this para publicar el progreso hacia el View
         Thread workerThread = new Thread(worker);
         workerThread.start();
-    }
 
+        mSmartDriveFS = SmartDriveFSFactory.getSmartDriveFS();
+    }
 
     /*
      FilesystemManager Method Implemented
      */
-    public void operate(FilesystemOperation operation) {
+
+    public void operate(ManagerOperation operation) {
         operation.addOperationObserver(this);
         queue.add(operation);
     }
@@ -38,17 +41,17 @@ public class FilesystemManagerImpl implements FilesystemManager, OperationObserv
      Due to that, this methods only route the operation to User Interface.
      */
     @Override
-    public void notifyStart(FilesystemOperation operation) {
+    public void notifyStart(ManagerOperation operation) {
         mMainWindow.showFilesystemOperationInfo(operation);
     }
 
     @Override
-    public void notifyProgress(FilesystemOperation operation, int current, int total) {
+    public void notifyProgress(ManagerOperation operation, int current, int total) {
         mMainWindow.showProgressBar(operation, current, total);
     }
 
     @Override
-    public void notifyEnd(FilesystemOperation operation) {
+    public void notifyEnd(ManagerOperation operation) {
         mMainWindow.showFilesystemOperationInfo(operation);
     }
 }

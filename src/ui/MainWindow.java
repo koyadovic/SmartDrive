@@ -1,10 +1,6 @@
 package ui;
 
-import core.SmartDrive;
-import core.SmartDriveFactory;
-import operations.FilesystemOperation;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
+import fsmanager.ManagerOperation;
 
 /**
  * Created by user on 21/10/15.
@@ -13,8 +9,8 @@ import org.eclipse.swt.widgets.Shell;
  */
 public interface MainWindow {
 
-    void showFilesystemOperationInfo(FilesystemOperation operation);
-    void showProgressBar(FilesystemOperation operation, int current, int total);
+    void showFilesystemOperationInfo(ManagerOperation operation);
+    void showProgressBar(ManagerOperation operation, int current, int total);
     void showErrorMessage(String title, String text);
     void showInfoMessage(String title, String text);
 

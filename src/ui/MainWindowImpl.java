@@ -4,7 +4,7 @@ import configuration.Configuration;
 import configuration.ConfigurationFactory;
 import core.SmartDrive;
 import core.SmartDriveFactory;
-import operations.FilesystemOperation;
+import fsmanager.ManagerOperation;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
@@ -47,12 +47,12 @@ public class MainWindowImpl implements MainWindow {
     }
 
     @Override
-    public void showFilesystemOperationInfo(FilesystemOperation operation) {
+    public void showFilesystemOperationInfo(ManagerOperation operation) {
 
     }
 
     @Override
-    public void showProgressBar(FilesystemOperation operation, int current, int total) {
+    public void showProgressBar(ManagerOperation operation, int current, int total) {
 
     }
 
