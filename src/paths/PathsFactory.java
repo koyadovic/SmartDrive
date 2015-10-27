@@ -5,16 +5,13 @@ package paths;
  */
 public class PathsFactory {
 
-    public static Paths getPaths() throws Exception {
+    public static Paths getPaths() {
         String os = System.getProperty("os.name", "generic");
 
-        if(os.toLowerCase().startsWith("linux")){
-            return new LinuxPaths();
-        }
-        else if(os.toLowerCase().startsWith("windows")) {
+        if(os.toLowerCase().startsWith("windows")) {
             return new WindowsPaths();
         } else {
-            throw new Exception("Platform not supported.");
+            return new LinuxPaths();
         }
     }
 }

@@ -1,10 +1,9 @@
 package configuration;
 
-import core.SmartDriveFactory;
 import org.ini4j.Wini;
 import paths.Paths;
 import paths.PathsFactory;
-import ui.MainWindow;
+import ui.MainUI;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,53 +12,60 @@ import java.io.IOException;
  * Created by user on 22/10/15.
  */
 public class ConfigurationImpl implements Configuration {
-    private MainWindow mMainWindow;
+    private MainUI mMainUI;
 
     private boolean mCreatedForTheFirstTime = false;
 
     // configuration vars
     private String mSmartDriveRootPath = "";
+    private int mLastLocalDirectoryOpenedID = 0;
+    private int mLastSmartDriveDirectoryOpenedID = 0;
 
-    protected ConfigurationImpl(MainWindow mainWindow) {
-        mMainWindow = mainWindow;
+    protected ConfigurationImpl(MainUI mainUI) {
+        mMainUI = mainUI;
+
+        File configurationFile = getConfigurationFile();
 
         try {
-            Paths paths = PathsFactory.getPaths();
-            String configPath = paths.getConfigurationFilePath();
-
-            File configurationFile = new File(configPath);
-
             if(! configurationFile.exists())
-                createConfigurationFile(configPath);
+                createConfigurationFile();
 
-            loadConfigurationFile(configPath);
+            loadConfigurationFile();
         }
         catch (IOException ioe){
-            mMainWindow.showErrorMessage("IO Error", ioe.getMessage());
+            mMainUI.showErrorMessage("IO Error", ioe.getMessage());
         }
         catch (Exception e){
-            mMainWindow.showErrorMessage("Unhandled exception", e.getMessage());
+            mMainUI.showErrorMessage("Unhandled exception", e.getMessage());
         }
 
 
     }
 
-    private void createConfigurationFile(String path) throws IOException {
+    private File getConfigurationFile() {
+        Paths paths = PathsFactory.getPaths();
+        String configPath = paths.getConfigurationFilePath();
+        return new File(configPath);
+    }
+
+    private void createConfigurationFile() throws IOException {
         mCreatedForTheFirstTime = true;
 
-        File configurationFile = new File(path);
-
+        // createConfigurationFile();
     }
 
-    private void loadConfigurationFile(String path) throws IOException {
-        File configurationFile = new File(path);
-        Wini ini = new Wini(configurationFile);
+    private void loadConfigurationFile() throws IOException {
+        Wini ini = new Wini(getConfigurationFile());
+        ini.get("main", "smartDriveRootPath", String.class);
+        ini.get("main", "lastLocalDirectoryID", Integer.class);
+        ini.get("main", "lastSmartDriveDirectoryID", Integer.class);
     }
 
-    private void saveConfigurationFile(String path) throws IOException {
-        File configurationFile = new File(path);
-        Wini ini = new Wini(configurationFile);
-        ini.put("main", "smartDriveRootPath", path);
+    private void saveConfigurationFile() throws IOException {
+        Wini ini = new Wini(getConfigurationFile());
+        ini.put("main", "smartDriveRootPath", mSmartDriveRootPath);
+        ini.put("main", "lastLocalDirectoryID", mLastLocalDirectoryOpenedID);
+        ini.put("main", "lastSmartDriveDirectoryID", mLastSmartDriveDirectoryOpenedID);
         ini.store();
 
     }
@@ -76,6 +82,27 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public void setSmartDriveRootPath(String path){
+
+    }
+
+
+    @Override
+    public int getLastLocalDirectoryOpenedID() {
+        return mLastLocalDirectoryOpenedID;
+    }
+
+    @Override
+    public void setLastLocalDirectoryOpenedID(int id) {
+
+    }
+
+    @Override
+    public int getLastSmartDriveDirectoryOpenedID() {
+        return mLastSmartDriveDirectoryOpenedID;
+    }
+
+    @Override
+    public void setLastSmartDriveDirectoryOpenedID(int id) {
 
     }
 }

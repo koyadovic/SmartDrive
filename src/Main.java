@@ -1,6 +1,6 @@
 
 import org.eclipse.swt.widgets.Display;
-import ui.MainWindowFactory;
+import ui.MainUIRunner;
 
 /**
  * Created by user on 21/10/15.
@@ -10,7 +10,7 @@ import ui.MainWindowFactory;
 public class Main {
     public static void main(String[] args){
         Display display = new Display();
-        MainWindowFactory.runInstance(display);
+        MainUIRunner.runInstance(display);
         display.dispose();
     }
 }

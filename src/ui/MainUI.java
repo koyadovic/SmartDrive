@@ -7,11 +7,17 @@ import fsmanager.ManagerOperation;
  *
  * Main window of the app. Here is were we will launch others windows like configuration ones, etc.
  */
-public interface MainWindow {
+public interface MainUI {
 
     void showFilesystemOperationInfo(ManagerOperation operation);
-    void showProgressBar(ManagerOperation operation, int current, int total);
+
+    void showProgressBar(ManagerOperation operation, long current, long total);
+
     void showErrorMessage(String title, String text);
     void showInfoMessage(String title, String text);
+    boolean showConfirmationDialog(String title, String text);
+
+    void exit(int status);
+    void run();
 
 }

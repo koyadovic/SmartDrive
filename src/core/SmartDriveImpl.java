@@ -5,21 +5,21 @@ import fsmanager.FilesystemManager;
 import fsmanager.FilesystemManagerFactory;
 import fsmanager.ManagerOperation;
 import fsmanager.ManagerOperationBuilder;
-import ui.MainWindow;
+import ui.MainUI;
 
 /**
  * Created by user on 20/10/15.
  */
 public class SmartDriveImpl implements SmartDrive {
-    private MainWindow mMainWindow;
+    private MainUI mMainUI;
     private FilesystemManager mManager;
 
     private FileElement mCurrentLocalDirectory;
     private FileElement mCurrentSmartDriveDirectory;
 
-    protected SmartDriveImpl(MainWindow mainWindow){
-        mMainWindow = mainWindow;
-        mManager = FilesystemManagerFactory.getFilesystemManager(mMainWindow);
+    protected SmartDriveImpl(MainUI mainUI){
+        mMainUI = mainUI;
+        mManager = FilesystemManagerFactory.getFilesystemManager(mMainUI);
 
         // leer la configuración .ini en %APPDATA%, si no existe SmartDrive directory, preguntarlo y guardar la configuración.
     }
@@ -31,7 +31,7 @@ public class SmartDriveImpl implements SmartDrive {
     @Override
     public void copyFileElement(FileElement target, FileElement destination) {
         if(! destination.isDirectory())
-            mMainWindow.showErrorMessage("Error", "Destination must be a directory");
+            mMainUI.showErrorMessage("Error", "Destination must be a directory");
 
         ManagerOperation operation = ManagerOperationBuilder.getCopyOperation(target, destination);
         mManager.operate(operation);
@@ -40,7 +40,7 @@ public class SmartDriveImpl implements SmartDrive {
     @Override
     public void moveFileElement(FileElement target, FileElement destination) {
         if(!target.isFile() && destination.isFile())
-            mMainWindow.showErrorMessage("Error", "Destination must be a directory");
+            mMainUI.showErrorMessage("Error", "Destination must be a directory");
 
         ManagerOperation operation = ManagerOperationBuilder.getMoveOperation(target, destination);
         mManager.operate(operation);
