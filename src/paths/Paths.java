@@ -5,4 +5,5 @@ package paths;
  */
 public interface Paths {
     String getConfigurationFilePath();
+    String getDefaultLocalRootDirectory();
 }

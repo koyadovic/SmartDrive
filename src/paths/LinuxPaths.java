@@ -15,4 +15,9 @@ public class LinuxPaths implements Paths {
     public String getConfigurationFilePath() {
         return System.getProperty("user.home") + "/.config/SmartDrive/config.ini";
     }
+
+    @Override
+    public String getDefaultLocalRootDirectory() {
+        return System.getProperty("user.home");
+    }
 }

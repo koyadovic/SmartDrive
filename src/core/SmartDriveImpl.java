@@ -101,31 +101,48 @@ public class SmartDriveImpl implements SmartDrive {
     }
 
     private void getRootSmartDriveDirectory(){
-        String rootDirectory = mUI.chooseDirectory("Choose the root directory");
+        String rootDirectory = mUI.chooseDirectory("Choose the root directory where will be placed SmartDrive directory");
 
         if(rootDirectory != null && !rootDirectory.equals("")) {
             File file = new File(rootDirectory);
 
-            if(file.exists()) {
-                if(file.isDirectory()){
-                    if(file.list().length > 0){
-                        boolean ok = mUI.confirm("Confirm", "Directory is not empty. Correct?");
+            if(! file.exists()) {
+                boolean ok = mUI.confirm("Confirm", "Create directory?");
+                if(ok) {
+                    ok = file.mkdirs();
+                    if(!ok)
+                        mUI.fatalError("Fatal Error", "Root directory creation failed.");
 
-                        if(ok) {
-                            try {
-                                mConfiguration.setSmartDriveRootPath(file.getCanonicalPath());
-                            } catch (IOException e){
-                                mUI.fatalError("IOException", e.getMessage());
-                            }
-                        } else {
-                            mUI.fatalError("Error", "Is not a directory!");
-                        }
-
-                    }
                 } else {
-                    mUI.fatalError("Error", "Is not a directory!");
+                    mUI.fatalError("Fatal Error", "Root directory needed");
                 }
             }
+
+            if(file.isDirectory()){
+                File rootSmartDriveDirectory = new File(file, "SmartDrive");
+                if(!rootSmartDriveDirectory.exists()) {
+                    boolean ok = rootSmartDriveDirectory.mkdirs();
+                    if (!ok) {
+                        try {
+                            mUI.fatalError("Fatal Error", "Cannot create " + rootSmartDriveDirectory.getCanonicalPath());
+                        } catch (IOException e){
+                            mUI.fatalError("IOException", e.getMessage());
+                        }
+                    } else {
+                        try {
+                            mConfiguration.setSmartDriveRootPath(rootSmartDriveDirectory.getCanonicalPath());
+                        } catch (IOException e){
+                            mUI.fatalError("IOException", e.getMessage());
+                        }
+                        mUI.information("Information", "SmartDrive directory created correctly.");
+                    }
+                }
+
+            } else {
+                mUI.fatalError("Fatal Error", "Is not a directory!");
+            }
+        } else {
+            mUI.fatalError("Fatal Error", "Must be selected a root directory where to place SmartDrive directory");
         }
     }
 }

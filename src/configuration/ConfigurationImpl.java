@@ -16,8 +16,8 @@ public class ConfigurationImpl implements Configuration {
 
     // configuration vars
     private String mSmartDriveRootPath = "";
-    private String mLastLocalDirectoryOpenedID = "";
-    private String mLastSmartDriveDirectoryOpenedID = "";
+    private String mLastLocalDirectoryOpened = PathsFactory.getPaths().getDefaultLocalRootDirectory();
+    private String mLastSmartDriveDirectoryOpened = "SD:\\"; // todo tendremos que ver cómo mejorar esto ...
 
     protected ConfigurationImpl() {
 
@@ -48,7 +48,7 @@ public class ConfigurationImpl implements Configuration {
     private void createConfigurationFile() throws IOException {
         mCreatedForTheFirstTime = true;
 
-        // todo createConfigurationFile();
+        saveConfigurationFile();
     }
 
     private void loadConfigurationFile() throws IOException {
@@ -61,8 +61,8 @@ public class ConfigurationImpl implements Configuration {
     private void saveConfigurationFile() throws IOException {
         Wini ini = new Wini(getConfigurationFile());
         ini.put("main", "smartDriveRootPath", mSmartDriveRootPath);
-        ini.put("main", "lastLocalDirectoryPath", mLastLocalDirectoryOpenedID);
-        ini.put("main", "lastSmartDriveDirectoryPath", mLastSmartDriveDirectoryOpenedID);
+        ini.put("main", "lastLocalDirectoryPath", mLastLocalDirectoryOpened);
+        ini.put("main", "lastSmartDriveDirectoryPath", mLastSmartDriveDirectoryOpened);
         ini.store();
 
     }
@@ -85,7 +85,7 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public String getLastLocalDirectoryOpenedPath() {
-        return mLastLocalDirectoryOpenedID;
+        return mLastLocalDirectoryOpened;
     }
 
     @Override
@@ -95,7 +95,7 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public String getLastSmartDriveDirectoryOpenedPath() {
-        return mLastSmartDriveDirectoryOpenedID;
+        return mLastSmartDriveDirectoryOpened;
     }
 
     @Override

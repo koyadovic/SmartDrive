@@ -13,4 +13,9 @@ public class WindowsPaths implements Paths {
     public String getConfigurationFilePath() {
         return System.getenv("APPDATA") + "\\SmartDrive\\config.ini";
     }
+
+    @Override
+    public String getDefaultLocalRootDirectory() {
+        return System.getenv("USERPROFILE");
+    }
 }

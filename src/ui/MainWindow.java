@@ -24,7 +24,8 @@ public class MainWindow {
     }
 
     protected static void freeResources(){
-        mShell.dispose();
+        if(mShell != null)
+            mShell.dispose();
     }
 
     private static void init(){
