@@ -2,8 +2,6 @@ package core;
 
 import files.FileElement;
 
-import java.util.List;
-
 /**
  * Created by user on 21/10/15.
  */

@@ -1,7 +1,5 @@
 package files;
 
-import core.SmartDrive;
-
 /**
  * Created by user on 27/10/15.
  */
