@@ -16,7 +16,7 @@ public class DialogChooseDirectory {
     private static final int width = 560;
     private static final int height = 420;
 
-    public static String show(String title){
+    protected static String show(String title){
         Display display = DisplaySingleton.getDisplay();
         Shell shell = new Shell(display, SWT.APPLICATION_MODAL);
         shell.setSize(width, height);

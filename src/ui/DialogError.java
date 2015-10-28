@@ -13,7 +13,7 @@ public class DialogError {
     private static final int width = 360;
     private static final int height = 70;
 
-    public static void show(String title, String message){
+    protected static void show(String title, String message){
         Display display = DisplaySingleton.getDisplay();
         Shell shell = new Shell(display);
 
@@ -31,6 +31,8 @@ public class DialogError {
         messageBox.setText(title);
         messageBox.setMessage(message);
         messageBox.open();
+
+        shell.dispose();
     }
 
 }

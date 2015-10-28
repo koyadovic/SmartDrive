@@ -3,6 +3,7 @@ package configuration;
 import org.ini4j.Wini;
 import paths.Paths;
 import paths.PathsFactory;
+import ui.UIFacadeSingleton;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,10 +30,10 @@ public class ConfigurationImpl implements Configuration {
             loadConfigurationFile();
         }
         catch (IOException ioe){
-            //mMainUI.showErrorMessage("IO Error", ioe.getMessage());
+            UIFacadeSingleton.getUIFacade().error("IO Error", ioe.getMessage());
         }
         catch (Exception e){
-            //mMainUI.showErrorMessage("Unhandled exception", e.getMessage());
+            UIFacadeSingleton.getUIFacade().error("Unhandled exception", e.getMessage());
         }
 
 
@@ -47,7 +48,7 @@ public class ConfigurationImpl implements Configuration {
     private void createConfigurationFile() throws IOException {
         mCreatedForTheFirstTime = true;
 
-        // createConfigurationFile();
+        // todo createConfigurationFile();
     }
 
     private void loadConfigurationFile() throws IOException {
@@ -78,7 +79,7 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public void setSmartDriveRootPath(String path){
-
+        // todo
     }
 
 
@@ -89,7 +90,7 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public void setLastLocalDirectoryOpenedPath(String id) {
-
+        // todo
     }
 
     @Override
@@ -99,6 +100,6 @@ public class ConfigurationImpl implements Configuration {
 
     @Override
     public void setLastSmartDriveDirectoryOpenedPath(String id) {
-
+        // todo
     }
 }

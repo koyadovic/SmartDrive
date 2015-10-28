@@ -12,7 +12,7 @@ public class MainWindow {
 
     private MainWindow() { }
 
-    public static void run() {
+    protected static void run() {
         mDisplay = DisplaySingleton.getDisplay();
 
         // create widgets and set listeners
@@ -23,8 +23,8 @@ public class MainWindow {
 
     }
 
-    public static void freeResources(){
-        DisplaySingleton.getDisplay().dispose();
+    protected static void freeResources(){
+        mShell.dispose();
     }
 
     private static void init(){
@@ -43,5 +43,6 @@ public class MainWindow {
                 mDisplay.sleep();
             }
         }
+        mDisplay.dispose();
     }
 }

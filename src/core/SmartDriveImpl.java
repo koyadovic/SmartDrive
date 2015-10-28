@@ -1,25 +1,40 @@
 package core;
 
+import configuration.Configuration;
+import configuration.ConfigurationFactory;
 import files.FileElement;
 import fsmanager.FilesystemManager;
 import fsmanager.FilesystemManagerFactory;
 import fsmanager.ManagerOperation;
 import fsmanager.ManagerOperationBuilder;
+import ui.UIFacade;
+import ui.UIFacadeSingleton;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by user on 20/10/15.
  */
 public class SmartDriveImpl implements SmartDrive {
-
+    private UIFacade mUI;
     private FilesystemManager mManager;
+    private Configuration mConfiguration;
 
     private FileElement mCurrentLocalDirectory;
     private FileElement mCurrentSmartDriveDirectory;
 
     protected SmartDriveImpl(){
+        mUI = UIFacadeSingleton.getUIFacade();
         mManager = FilesystemManagerFactory.getFilesystemManager();
+        mConfiguration = ConfigurationFactory.getConfiguration();
 
-        // leer la configuración .ini en %APPDATA%, si no existe SmartDrive directory, preguntarlo y guardar la configuración.
+        if(mConfiguration.isCreatedForTheFirstTime() ||
+                mConfiguration.getSmartDriveRootPath() == null ||
+                mConfiguration.getSmartDriveRootPath().equals(""))
+
+            getRootSmartDriveDirectory();
+
     }
 
 
@@ -28,20 +43,24 @@ public class SmartDriveImpl implements SmartDrive {
      */
     @Override
     public void copyFileElement(FileElement target, FileElement destination) {
-        // todo if(! destination.isDirectory())
-            //mMainUI.showErrorMessage("Error", "Destination must be a directory");
+        if(! destination.isDirectory()) {
+            mUI.error("Error", "Destination must be a directory");
 
-        ManagerOperation operation = ManagerOperationBuilder.getCopyOperation(target, destination);
-        mManager.operate(operation);
+        } else {
+            ManagerOperation operation = ManagerOperationBuilder.getCopyOperation(target, destination);
+            mManager.operate(operation);
+        }
     }
 
     @Override
     public void moveFileElement(FileElement target, FileElement destination) {
-        // todo if(!target.isFile() && destination.isFile())
-            // mMainUI.showErrorMessage("Error", "Destination must be a directory");
+        if(!target.isFile() && destination.isFile()) {
+            mUI.error("Error", "Destination must be a directory");
 
-        ManagerOperation operation = ManagerOperationBuilder.getMoveOperation(target, destination);
-        mManager.operate(operation);
+        } else {
+            ManagerOperation operation = ManagerOperationBuilder.getMoveOperation(target, destination);
+            mManager.operate(operation);
+        }
     }
 
     @Override
@@ -70,4 +89,43 @@ public class SmartDriveImpl implements SmartDrive {
         return mCurrentSmartDriveDirectory;
     }
 
+    @Override
+    public void startApplication() {
+        mUI.startUI();
+    }
+
+    @Override
+    public void endApplication(int status) {
+        mUI.finishUI();
+        System.exit(1);
+    }
+
+    private void getRootSmartDriveDirectory(){
+        String rootDirectory = mUI.chooseDirectory("Choose the root directory");
+
+        if(rootDirectory != null && !rootDirectory.equals("")) {
+            File file = new File(rootDirectory);
+
+            if(file.exists()) {
+                if(file.isDirectory()){
+                    if(file.list().length > 0){
+                        boolean ok = mUI.confirm("Confirm", "Directory is not empty. Correct?");
+
+                        if(ok) {
+                            try {
+                                mConfiguration.setSmartDriveRootPath(file.getCanonicalPath());
+                            } catch (IOException e){
+                                mUI.fatalError("IOException", e.getMessage());
+                            }
+                        } else {
+                            mUI.fatalError("Error", "Is not a directory!");
+                        }
+
+                    }
+                } else {
+                    mUI.fatalError("Error", "Is not a directory!");
+                }
+            }
+        }
+    }
 }

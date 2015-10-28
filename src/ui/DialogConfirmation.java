@@ -17,7 +17,7 @@ public class DialogConfirmation {
     private static final int width = 360;
     private static final int height = 70;
 
-    public static boolean show(String title, String message){
+    protected static boolean show(String title, String message){
         Display display = DisplaySingleton.getDisplay();
         Shell shell = new Shell(display);
 
@@ -34,7 +34,9 @@ public class DialogConfirmation {
 
         messageBox.setText(title);
         messageBox.setMessage(message);
+        int ok = messageBox.open();
 
-        return messageBox.open() == SWT.OK;
+        shell.dispose();
+        return ok == SWT.OK;
     }
 }

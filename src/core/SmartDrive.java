@@ -16,4 +16,7 @@ public interface SmartDrive {
     FileElement getCurrentLocalDirectory();
     FileElement getCurrentSmartDriveDirectory();
 
+    void startApplication();
+    void endApplication(int status);
+
 }
