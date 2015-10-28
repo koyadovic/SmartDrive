@@ -1,7 +1,5 @@
 package configuration;
 
-import ui.MainUI;
-
 /**
  * Created by user on 22/10/15.
  *
@@ -11,8 +9,8 @@ public class ConfigurationFactory {
 
     private ConfigurationFactory(){}
 
-    public static Configuration getConfiguration(MainUI mainUI) {
-        return new ConfigurationImpl(mainUI);
+    public static Configuration getConfiguration() {
+        return new ConfigurationImpl();
 
     }
 }

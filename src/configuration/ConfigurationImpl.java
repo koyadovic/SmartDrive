@@ -3,7 +3,6 @@ package configuration;
 import org.ini4j.Wini;
 import paths.Paths;
 import paths.PathsFactory;
-import ui.MainUI;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,8 +11,6 @@ import java.io.IOException;
  * Created by user on 22/10/15.
  */
 public class ConfigurationImpl implements Configuration {
-    private MainUI mMainUI;
-
     private boolean mCreatedForTheFirstTime = false;
 
     // configuration vars
@@ -21,8 +18,7 @@ public class ConfigurationImpl implements Configuration {
     private String mLastLocalDirectoryOpenedID = "";
     private String mLastSmartDriveDirectoryOpenedID = "";
 
-    protected ConfigurationImpl(MainUI mainUI) {
-        mMainUI = mainUI;
+    protected ConfigurationImpl() {
 
         File configurationFile = getConfigurationFile();
 
@@ -33,10 +29,10 @@ public class ConfigurationImpl implements Configuration {
             loadConfigurationFile();
         }
         catch (IOException ioe){
-            mMainUI.showErrorMessage("IO Error", ioe.getMessage());
+            //mMainUI.showErrorMessage("IO Error", ioe.getMessage());
         }
         catch (Exception e){
-            mMainUI.showErrorMessage("Unhandled exception", e.getMessage());
+            //mMainUI.showErrorMessage("Unhandled exception", e.getMessage());
         }
 
 

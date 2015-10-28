@@ -1,7 +1,5 @@
 package fsmanager;
 
-import ui.MainUI;
-
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -10,10 +8,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class FilesystemManagerImpl implements FilesystemManager, OperationObserver {
     private final Queue<ManagerOperation> queue = new ConcurrentLinkedQueue<ManagerOperation>();
-    private MainUI mMainUI;
 
-    protected FilesystemManagerImpl(MainUI mainUI){
-        mMainUI = mainUI;
+    protected FilesystemManagerImpl(){
         FilesystemWorker worker = new FilesystemWorker(this, queue); // this para publicar el progreso hacia el View
         Thread workerThread = new Thread(worker);
         workerThread.start();
@@ -37,16 +33,16 @@ public class FilesystemManagerImpl implements FilesystemManager, OperationObserv
      */
     @Override
     public void notifyStart(ManagerOperation operation) {
-        mMainUI.showFilesystemOperationInfo(operation);
+        //todo mMainUI.showFilesystemOperationInfo(operation);
     }
 
     @Override
     public void notifyProgress(ManagerOperation operation, int current, int total) {
-        mMainUI.showProgressBar(operation, current, total);
+        //todo mMainUI.showProgressBar(operation, current, total);
     }
 
     @Override
     public void notifyEnd(ManagerOperation operation) {
-        mMainUI.showFilesystemOperationInfo(operation);
+        //todo mMainUI.showFilesystemOperationInfo(operation);
     }
 }
