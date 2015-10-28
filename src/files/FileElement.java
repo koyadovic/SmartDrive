@@ -18,11 +18,10 @@ public interface FileElement {
     boolean delete();
     boolean exists();
 
-    String getAbsolutePath();
+    String getCanonicalPath();
 
     String getName();
-    String getParent();
-    FileElement getParentFile();
+    FileElement getParent();
 
     long length(); // the length in bytes for the file, if a directory unespecified
 

@@ -1,10 +1,31 @@
 package files;
 
+import core.SmartDrive;
+
 /**
  * Created by user on 27/10/15.
  */
 public class SmartDriveFile implements FileElement {
-    private final int mType = FileElement.TYPE_SMARTDRIVE;
+    private final int   mType = FileElement.TYPE_SMARTDRIVE;
+
+    private String      mName;
+    private FileElement mParent;
+    private long        mSize;
+
+    private static final String mPathPrefix     = "SD:";
+    private static final String mPathSeparator  = "\\";
+
+    public SmartDriveFile(String pathname){
+
+    }
+
+    public SmartDriveFile(String parent, String child){
+
+    }
+
+    public SmartDriveFile(FileElement parent, String child){
+
+    }
 
     @Override
     public boolean isFile() {
@@ -42,8 +63,20 @@ public class SmartDriveFile implements FileElement {
     }
 
     @Override
-    public String getAbsolutePath() {
-        return null;
+    public String getCanonicalPath() {
+        FileElement c   = this;
+        String path     = "";
+
+        while(c != null){
+            path        = mPathSeparator + c.getName() + path;
+            c           = c.getParent();
+        }
+        path            = mPathPrefix + path;
+
+        if(isDirectory())
+            path        = path + mPathPrefix;
+
+        return path;
     }
 
     @Override
@@ -52,13 +85,8 @@ public class SmartDriveFile implements FileElement {
     }
 
     @Override
-    public String getParent() {
-        return null;
-    }
-
-    @Override
-    public FileElement getParentFile() {
-        return null;
+    public FileElement getParent() {
+        return mParent;
     }
 
     @Override

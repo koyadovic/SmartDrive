@@ -18,8 +18,8 @@ public class ConfigurationImpl implements Configuration {
 
     // configuration vars
     private String mSmartDriveRootPath = "";
-    private int mLastLocalDirectoryOpenedID = 0;
-    private int mLastSmartDriveDirectoryOpenedID = 0;
+    private String mLastLocalDirectoryOpenedID = "";
+    private String mLastSmartDriveDirectoryOpenedID = "";
 
     protected ConfigurationImpl(MainUI mainUI) {
         mMainUI = mainUI;
@@ -57,15 +57,15 @@ public class ConfigurationImpl implements Configuration {
     private void loadConfigurationFile() throws IOException {
         Wini ini = new Wini(getConfigurationFile());
         ini.get("main", "smartDriveRootPath", String.class);
-        ini.get("main", "lastLocalDirectoryID", Integer.class);
-        ini.get("main", "lastSmartDriveDirectoryID", Integer.class);
+        ini.get("main", "lastLocalDirectoryPath", String.class);
+        ini.get("main", "lastSmartDriveDirectoryPath", String.class);
     }
 
     private void saveConfigurationFile() throws IOException {
         Wini ini = new Wini(getConfigurationFile());
         ini.put("main", "smartDriveRootPath", mSmartDriveRootPath);
-        ini.put("main", "lastLocalDirectoryID", mLastLocalDirectoryOpenedID);
-        ini.put("main", "lastSmartDriveDirectoryID", mLastSmartDriveDirectoryOpenedID);
+        ini.put("main", "lastLocalDirectoryPath", mLastLocalDirectoryOpenedID);
+        ini.put("main", "lastSmartDriveDirectoryPath", mLastSmartDriveDirectoryOpenedID);
         ini.store();
 
     }
@@ -87,22 +87,22 @@ public class ConfigurationImpl implements Configuration {
 
 
     @Override
-    public int getLastLocalDirectoryOpenedID() {
+    public String getLastLocalDirectoryOpenedPath() {
         return mLastLocalDirectoryOpenedID;
     }
 
     @Override
-    public void setLastLocalDirectoryOpenedID(int id) {
+    public void setLastLocalDirectoryOpenedPath(String id) {
 
     }
 
     @Override
-    public int getLastSmartDriveDirectoryOpenedID() {
+    public String getLastSmartDriveDirectoryOpenedPath() {
         return mLastSmartDriveDirectoryOpenedID;
     }
 
     @Override
-    public void setLastSmartDriveDirectoryOpenedID(int id) {
+    public void setLastSmartDriveDirectoryOpenedPath(String id) {
 
     }
 }

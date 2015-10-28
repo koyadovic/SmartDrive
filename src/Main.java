@@ -8,7 +8,9 @@ import ui.MainUIRunner;
  * This is the entry point of the app.
  */
 public class Main {
+
     public static void main(String[] args){
+
         Display display = new Display();
         MainUIRunner.runInstance(display);
         display.dispose();

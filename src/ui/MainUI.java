@@ -9,6 +9,8 @@ import fsmanager.ManagerOperation;
  */
 public interface MainUI {
 
+    // todo El mainUI hay que montarlo como Singleton, accesible desde toda la app. Para mensajes de error, progressbars, etc.
+
     void showFilesystemOperationInfo(ManagerOperation operation);
 
     void showProgressBar(ManagerOperation operation, long current, long total);

@@ -9,12 +9,12 @@ public interface Configuration {
     String getSmartDriveRootPath();
     void setSmartDriveRootPath(String path);
 
-    int getLastLocalDirectoryOpenedID();
-    void setLastLocalDirectoryOpenedID(int id);
+    // this String stored must be understood to recreate the necessary objects later
+    // using the objects constructors or whatever. package "files"
+    String getLastLocalDirectoryOpenedPath();
+    void setLastLocalDirectoryOpenedPath(String path);
 
-    int getLastSmartDriveDirectoryOpenedID();
-    void setLastSmartDriveDirectoryOpenedID(int id);
-
-
+    String getLastSmartDriveDirectoryOpenedPath();
+    void setLastSmartDriveDirectoryOpenedPath(String path);
 
 }
