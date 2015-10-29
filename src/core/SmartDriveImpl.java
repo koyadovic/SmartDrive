@@ -30,16 +30,15 @@ public class SmartDriveImpl implements SmartDrive {
         mConfiguration = ConfigurationFactory.getConfiguration();
 
         if(mConfiguration.isCreatedForTheFirstTime() ||
-                mConfiguration.getSmartDriveRootPath() == null ||
-                mConfiguration.getSmartDriveRootPath().equals(""))
+                mConfiguration.getSmartDriveLocalRootPath() == null ||
+                mConfiguration.getSmartDriveLocalRootPath().equals(""))
 
             getRootSmartDriveDirectory();
-
     }
 
 
-    /*
-     Here we must translate UI request into concrete FilesystemOperation's
+    /**
+     * Here we must translate UI request into concrete FilesystemOperation's
      */
     @Override
     public void copyFileElement(FileElement target, FileElement destination) {
@@ -130,7 +129,8 @@ public class SmartDriveImpl implements SmartDrive {
                         }
                     } else {
                         try {
-                            mConfiguration.setSmartDriveRootPath(rootSmartDriveDirectory.getCanonicalPath());
+                            mConfiguration.setSmartDriveLocalRootPath(rootSmartDriveDirectory.getCanonicalPath());
+                            mConfiguration.save();
                         } catch (IOException e){
                             mUI.fatalError("IOException", e.getMessage());
                         }

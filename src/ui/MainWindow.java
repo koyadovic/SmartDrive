@@ -23,11 +23,17 @@ public class MainWindow {
 
     }
 
+    /**
+     * Frees resources closing the main window
+     */
     protected static void freeResources(){
         if(mShell != null)
             mShell.dispose();
     }
 
+    /**
+     * Init the main window, add layouts widgets and set listeners
+     */
     private static void init(){
         mShell = new Shell(mDisplay);
 
@@ -37,6 +43,9 @@ public class MainWindow {
     }
 
 
+    /**
+     * Starts the main loop
+     */
     private static void start() {
         // execution loop
         while (!mShell.isDisposed()) {

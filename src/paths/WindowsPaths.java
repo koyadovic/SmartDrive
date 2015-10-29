@@ -10,8 +10,8 @@ public class WindowsPaths implements Paths {
     }
 
     @Override
-    public String getConfigurationFilePath() {
-        return System.getenv("APPDATA") + "\\SmartDrive\\config.ini";
+    public String getConfigurationDirectoryPath() {
+        return System.getenv("APPDATA") + "\\SmartDrive\\";
     }
 
     @Override

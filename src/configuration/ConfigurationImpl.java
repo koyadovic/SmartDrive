@@ -15,7 +15,7 @@ public class ConfigurationImpl implements Configuration {
     private boolean mCreatedForTheFirstTime = false;
 
     // configuration vars
-    private String mSmartDriveRootPath = "";
+    private String mSmartDriveLocalRootPath = "";
     private String mLastLocalDirectoryOpened = PathsFactory.getPaths().getDefaultLocalRootDirectory();
     private String mLastSmartDriveDirectoryOpened = "SD:\\"; // todo tendremos que ver cómo mejorar esto ...
 
@@ -27,7 +27,6 @@ public class ConfigurationImpl implements Configuration {
             if(! configurationFile.exists())
                 createConfigurationFile();
 
-            loadConfigurationFile();
         }
         catch (IOException ioe){
             UIFacadeSingleton.getUIFacade().error("IO Error", ioe.getMessage());
@@ -36,12 +35,13 @@ public class ConfigurationImpl implements Configuration {
             UIFacadeSingleton.getUIFacade().error("Unhandled exception", e.getMessage());
         }
 
-
+        load();
     }
 
     private File getConfigurationFile() {
         Paths paths = PathsFactory.getPaths();
-        String configPath = paths.getConfigurationFilePath();
+        String configPath = paths.getConfigurationDirectoryPath();
+        configPath += "config.ini";
         return new File(configPath);
     }
 
@@ -58,13 +58,29 @@ public class ConfigurationImpl implements Configuration {
         ini.get("main", "lastSmartDriveDirectoryPath", String.class);
     }
 
+    private void load(){
+        try {
+            loadConfigurationFile();
+        } catch (IOException e){
+            UIFacadeSingleton.getUIFacade().fatalError("Fatal Error", "Cannot load configuration file: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void save() {
+        try {
+            saveConfigurationFile();
+        } catch (IOException e){
+            UIFacadeSingleton.getUIFacade().fatalError("Fatal Error", "Cannot save configuration file: " + e.getMessage());
+        }
+    }
+
     private void saveConfigurationFile() throws IOException {
         Wini ini = new Wini(getConfigurationFile());
-        ini.put("main", "smartDriveRootPath", mSmartDriveRootPath);
+        ini.put("main", "smartDriveRootPath", mSmartDriveLocalRootPath);
         ini.put("main", "lastLocalDirectoryPath", mLastLocalDirectoryOpened);
         ini.put("main", "lastSmartDriveDirectoryPath", mLastSmartDriveDirectoryOpened);
         ini.store();
-
     }
 
     @Override
@@ -73,13 +89,13 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
-    public String getSmartDriveRootPath() {
-        return mSmartDriveRootPath;
+    public String getSmartDriveLocalRootPath() {
+        return mSmartDriveLocalRootPath;
     }
 
     @Override
-    public void setSmartDriveRootPath(String path){
-        // todo
+    public void setSmartDriveLocalRootPath(String path){
+        mSmartDriveLocalRootPath = path;
     }
 
 
@@ -89,8 +105,8 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
-    public void setLastLocalDirectoryOpenedPath(String id) {
-        // todo
+    public void setLastLocalDirectoryOpenedPath(String path) {
+        mLastLocalDirectoryOpened = path;
     }
 
     @Override
@@ -99,7 +115,7 @@ public class ConfigurationImpl implements Configuration {
     }
 
     @Override
-    public void setLastSmartDriveDirectoryOpenedPath(String id) {
-        // todo
+    public void setLastSmartDriveDirectoryOpenedPath(String path) {
+        mLastSmartDriveDirectoryOpened = path;
     }
 }
