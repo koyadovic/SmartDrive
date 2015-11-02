@@ -1,5 +1,8 @@
 package fsmanager;
 
+import ui.UIFacade;
+import ui.UIFacadeSingleton;
+
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -33,16 +36,24 @@ public class FilesystemManagerImpl implements FilesystemManager, OperationObserv
      */
     @Override
     public void notifyStart(ManagerOperation operation) {
-        //todo mMainUI.showFilesystemOperationInfo(operation);
+        UIFacadeSingleton.getUIFacade().information("Start Operation", operation.getStatusText());
     }
 
     @Override
     public void notifyProgress(ManagerOperation operation, int current, int total) {
-        //todo mMainUI.showProgressBar(operation, current, total);
+        UIFacade ui = UIFacadeSingleton.getUIFacade();
+
+        if(! ui.isProgressBarStarted())
+            ui.startProgressBar();
+
+        ui.updateProgressBar(current, total);
+
+        if(current == total)
+            ui.endProgressBar();
     }
 
     @Override
     public void notifyEnd(ManagerOperation operation) {
-        //todo mMainUI.showFilesystemOperationInfo(operation);
+        UIFacadeSingleton.getUIFacade().information("End Operation", operation.getStatusText());
     }
 }

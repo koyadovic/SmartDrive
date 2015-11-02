@@ -45,4 +45,24 @@ public class UIFacadeImpl implements UIFacade {
     public void information(String title, String message) {
         DialogInformation.show(title, message);
     }
+
+    @Override
+    public void startProgressBar() {
+
+    }
+
+    @Override
+    public void updateProgressBar(int total, int current) {
+
+    }
+
+    @Override
+    public void endProgressBar() {
+
+    }
+
+    @Override
+    public boolean isProgressBarStarted() {
+        return false;
+    }
 }

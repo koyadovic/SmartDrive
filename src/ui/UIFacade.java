@@ -49,4 +49,26 @@ public interface UIFacade {
      */
     void information(String title, String message);
 
+    /**
+     * Starts the Progress Bar
+     */
+    void startProgressBar();
+
+    /**
+     *  Updates the Progress Bar
+     * @param current working step
+     * @param total of steps
+     */
+    void updateProgressBar(int current, int total);
+
+    /**
+     * Ends the Progress Bar
+     */
+    void endProgressBar();
+
+    /**
+     *
+     * @return true if a Progress Bar is currently shown
+     */
+    boolean isProgressBarStarted();
 }
