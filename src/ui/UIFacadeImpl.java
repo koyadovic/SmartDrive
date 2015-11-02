@@ -1,13 +1,17 @@
 package ui;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.ProgressBar;
+import org.eclipse.swt.widgets.Shell;
+
 /**
  * Created by user on 28/10/15.
  */
 public class UIFacadeImpl implements UIFacade {
 
-    protected UIFacadeImpl(){
-
-    }
+    protected UIFacadeImpl(){}
 
     @Override
     public void startUI() {
@@ -46,23 +50,52 @@ public class UIFacadeImpl implements UIFacade {
         DialogInformation.show(title, message);
     }
 
+    /*
+     Main field for the progress bar
+     */
+    private ProgressBar mProgressBar = null;
+
     @Override
     public void startProgressBar() {
+        if(mProgressBar != null)
+            mProgressBar.dispose();
 
+        Display display = DisplaySingleton.getDisplay();
+        Shell shell = new Shell(display);
+        mProgressBar = new ProgressBar(shell, SWT.SMOOTH);
+        Rectangle clientArea = shell.getClientArea();
+        mProgressBar.setBounds(clientArea.x, clientArea.y, 200, 32);
+        shell.open();
     }
 
     @Override
-    public void updateProgressBar(int total, int current) {
+    public void updateProgressBar(int total, final int current) {
+        if(mProgressBar != null) {
+            if (mProgressBar.getDisplay().isDisposed()) return;
 
+            int maxProgress = mProgressBar.getMaximum();
+            final int one = maxProgress / total;
+
+            mProgressBar.getDisplay().asyncExec(new Runnable() {
+                @Override
+                public void run() {
+                    mProgressBar.setSelection(one * current);
+                }
+            });
+
+        }
     }
 
     @Override
     public void endProgressBar() {
+        if(mProgressBar != null)
+            mProgressBar.dispose();
 
+        mProgressBar = null;
     }
 
     @Override
     public boolean isProgressBarStarted() {
-        return false;
+        return mProgressBar != null;
     }
 }
