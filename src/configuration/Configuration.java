@@ -4,6 +4,22 @@ package configuration;
  * Created by user on 22/10/15.
  */
 public interface Configuration {
+    String SMARTDRIVE_LOCAL_ROOT_PATH = "smartdrive_local_root_path";
+    String LAST_LOCAL_DIRECTORY_OPENED = "last_local_directory_opened";
+    String LAST_SMARTDRIVE_DIRECTORY_OPENED = "last_smartdrive_directory_opened";
+
+
+    void setValue(String key, String value);
+    void setValue(String key, Integer value);
+    void setValue(String key, Float value);
+    void setValue(String key, Double value);
+    void setValue(String key, Long value);
+
+    String getStringValue(String key);
+    Integer  getIntegerValue(String key);
+    Float getFloatValue(String key);
+    Double getDoubleValue(String key);
+    Long getLongValue(String key);
 
     /**
      * because users must specify the Directory where SmartDrive will place SmartDrive directory and all the files inside it.
@@ -12,42 +28,8 @@ public interface Configuration {
     boolean isCreatedForTheFirstTime();
 
     /**
-     * On the first execution, users will be prompted to select a directory to place the root directory of SmartDrive
-     * If a user select ./Directory/ the root directory of SmartDrive will be ./Directory/SmartDrive/
-     * @return The canonical path of the root directory of SmartDrive
+     * This makes all the configuration changes persistent.
      */
-    String getSmartDriveLocalRootPath();
-
-    /**
-     * @param path Sets the root directory of SmartDrive
-     */
-    void setSmartDriveLocalRootPath(String path);
-
-    /**
-     * this String stored must be understood to recreate the necessary objects later
-     * using the objects constructors or whatever. package "files"
-     * @return The last local directory opened by the user
-     */
-    String getLastLocalDirectoryOpenedPath();
-
-    /**
-     * @param path Sets the last local directory opened by the user
-     */
-    void setLastLocalDirectoryOpenedPath(String path);
-
-    /**
-     * @return Here is the same but for SmartDrive, not for local.
-     */
-    String getLastSmartDriveDirectoryOpenedPath();
-
-    /**
-     * @param path Sets the last SmartDrive directory opened by the user
-     */
-    void setLastSmartDriveDirectoryOpenedPath(String path);
-
-    /**
-     * This makes all the configuration changes to be persistent.
-     */
-    void save();
+    void storeConfiguration();
 
 }

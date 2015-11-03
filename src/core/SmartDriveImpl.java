@@ -30,8 +30,8 @@ public class SmartDriveImpl implements SmartDrive {
         mConfiguration = ConfigurationFactory.getConfiguration();
 
         if(mConfiguration.isCreatedForTheFirstTime() ||
-                mConfiguration.getSmartDriveLocalRootPath() == null ||
-                mConfiguration.getSmartDriveLocalRootPath().equals(""))
+                mConfiguration.getStringValue(Configuration.SMARTDRIVE_LOCAL_ROOT_PATH) == null ||
+                mConfiguration.getStringValue(Configuration.SMARTDRIVE_LOCAL_ROOT_PATH).equals(""))
 
             getRootSmartDriveDirectory();
     }
@@ -129,8 +129,8 @@ public class SmartDriveImpl implements SmartDrive {
                         }
                     } else {
                         try {
-                            mConfiguration.setSmartDriveLocalRootPath(rootSmartDriveDirectory.getCanonicalPath());
-                            mConfiguration.save();
+                            mConfiguration.setValue(Configuration.SMARTDRIVE_LOCAL_ROOT_PATH, rootSmartDriveDirectory.getCanonicalPath());
+                            mConfiguration.storeConfiguration();
                         } catch (IOException e){
                             mUI.fatalError("IOException", e.getMessage());
                         }
