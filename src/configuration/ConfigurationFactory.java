@@ -11,6 +11,5 @@ public class ConfigurationFactory {
 
     public static Configuration getConfiguration() {
         return new ConfigurationImpl();
-
     }
 }

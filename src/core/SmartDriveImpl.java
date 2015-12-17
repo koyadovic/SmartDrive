@@ -29,10 +29,7 @@ public class SmartDriveImpl implements SmartDrive {
         mManager = FilesystemManagerFactory.getFilesystemManager();
         mConfiguration = ConfigurationFactory.getConfiguration();
 
-        if(mConfiguration.isCreatedForTheFirstTime() ||
-                mConfiguration.getStringValue(Configuration.SMARTDRIVE_LOCAL_ROOT_PATH) == null ||
-                mConfiguration.getStringValue(Configuration.SMARTDRIVE_LOCAL_ROOT_PATH).equals(""))
-
+        if(mConfiguration.isCreatedForTheFirstTime()||mConfiguration.getStringValue(SmartDrive.CONFIGURATION_ROOT_LOCAL_DIRECTORY_FOR_SMARTDRIVE, "").equals(""))
             getRootSmartDriveDirectory();
     }
 
@@ -118,7 +115,7 @@ public class SmartDriveImpl implements SmartDrive {
             }
 
             if(file.isDirectory()){
-                File rootSmartDriveDirectory = new File(file, "SmartDrive");
+                File rootSmartDriveDirectory = new File(file, ".sd");
                 if(!rootSmartDriveDirectory.exists()) {
                     boolean ok = rootSmartDriveDirectory.mkdirs();
                     if (!ok) {
@@ -129,8 +126,9 @@ public class SmartDriveImpl implements SmartDrive {
                         }
                     } else {
                         try {
-                            mConfiguration.setValue(Configuration.SMARTDRIVE_LOCAL_ROOT_PATH, rootSmartDriveDirectory.getCanonicalPath());
+                            mConfiguration.setValue(SmartDrive.CONFIGURATION_ROOT_LOCAL_DIRECTORY_FOR_SMARTDRIVE, rootSmartDriveDirectory.getCanonicalPath());
                             mConfiguration.storeConfiguration();
+
                         } catch (IOException e){
                             mUI.fatalError("IOException", e.getMessage());
                         }
