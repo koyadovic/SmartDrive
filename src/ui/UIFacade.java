@@ -1,5 +1,7 @@
 package ui;
 
+import core.SmartDrive;
+
 /**
  * Created by user on 28/10/15.
  */
@@ -71,4 +73,10 @@ public interface UIFacade {
      * @return true if a Progress Bar is currently shown
      */
     boolean isProgressBarStarted();
+
+    /**
+     * Sets the application controller to dispatch events from the UI
+     * @param controller the application controller
+     */
+    void setApplicationController(SmartDrive controller);
 }

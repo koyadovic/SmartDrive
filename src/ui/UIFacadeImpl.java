@@ -1,5 +1,6 @@
 package ui;
 
+import core.SmartDrive;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
@@ -10,6 +11,11 @@ import org.eclipse.swt.widgets.Shell;
  * Created by user on 28/10/15.
  */
 public class UIFacadeImpl implements UIFacade {
+
+    /*
+     Main field for the progress bar
+     */
+    private ProgressBar mProgressBar = null;
 
     protected UIFacadeImpl(){}
 
@@ -49,11 +55,6 @@ public class UIFacadeImpl implements UIFacade {
     public void information(String title, String message) {
         DialogInformation.show(title, message);
     }
-
-    /*
-     Main field for the progress bar
-     */
-    private ProgressBar mProgressBar = null;
 
     @Override
     public void startProgressBar() {
@@ -97,5 +98,10 @@ public class UIFacadeImpl implements UIFacade {
     @Override
     public boolean isProgressBarStarted() {
         return mProgressBar != null;
+    }
+
+    @Override
+    public void setApplicationController(SmartDrive controller) {
+        MainWindow.setApplicationController(controller);
     }
 }

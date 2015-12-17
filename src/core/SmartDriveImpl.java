@@ -17,6 +17,8 @@ import java.io.IOException;
  * Created by user on 20/10/15.
  */
 public class SmartDriveImpl implements SmartDrive {
+    private static final String APPLICATION_NAME = "SmartDrive";
+    private static final String APPLICATION_VERSION = "v0.1";
     private UIFacade mUI;
     private FilesystemManager mManager;
     private Configuration mConfiguration;
@@ -31,6 +33,8 @@ public class SmartDriveImpl implements SmartDrive {
 
         if(mConfiguration.isCreatedForTheFirstTime()||mConfiguration.getStringValue(SmartDrive.CONFIGURATION_ROOT_LOCAL_DIRECTORY_FOR_SMARTDRIVE, "").equals(""))
             getRootSmartDriveDirectory();
+
+        mUI.setApplicationController(this);
     }
 
 
@@ -142,5 +146,10 @@ public class SmartDriveImpl implements SmartDrive {
         } else {
             mUI.fatalError("Fatal Error", "Must be selected a root directory where to place SmartDrive directory");
         }
+    }
+
+    @Override
+    public String getApplicationNameAndVersion() {
+        return APPLICATION_NAME + " " + APPLICATION_VERSION;
     }
 }

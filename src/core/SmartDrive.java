@@ -22,4 +22,6 @@ public interface SmartDrive {
     void startApplication();
     void endApplication(int status);
 
+    String getApplicationNameAndVersion();
+
 }
