@@ -2,11 +2,13 @@ package ui;
 
 import core.SmartDrive;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
+import paths.PathsFactory;
 
 /**
  * Created by user on 28/10/15.
@@ -15,6 +17,17 @@ public class MainWindow {
     private static Display mDisplay;
     private static Shell mShell;
     private static SmartDrive mSmartDriveController;
+
+    private static Combo mLocalDirectoryCombo;
+    private static Combo mSmartDriveDirectoryCombo;
+
+    private static List mDebugArea;
+
+    private static Tree mLocalTree;
+    private static Tree mSmartDriveTree;
+
+    private static Table mLocalTable;
+    private static Table mSmartDriveTable;
 
     private MainWindow() { }
 
@@ -76,12 +89,12 @@ public class MainWindow {
         aboutItem.addSelectionListener(new SelectionListener() {
             @Override
             public void widgetSelected(SelectionEvent selectionEvent) {
-                UIFacadeSingleton.getUIFacade().information("About", "Just better than OneDrive ;-)");
+                UIFacadeSingleton.getUIFacade().information("About SmartDrive", "SmartDrive\n\nJust better than OneDrive ;-)\n\nBy Miguel Collado");
             }
 
             @Override
             public void widgetDefaultSelected(SelectionEvent selectionEvent) {
-                UIFacadeSingleton.getUIFacade().information("About", "Just better than OneDrive ;-)");
+                UIFacadeSingleton.getUIFacade().information("About SmartDrive", "SmartDrive\n\nJust better than OneDrive ;-)\n\nBy Miguel Collado");
             }
         });
 
@@ -90,42 +103,141 @@ public class MainWindow {
     }
 
     private static void configureDebugArea(){
-        GridData gridDataDebug = new GridData(GridData.FILL, GridData.FILL, true, true);
+        GridData gridDataDebug = new GridData(GridData.FILL, GridData.FILL, true, false);
         gridDataDebug.horizontalSpan = 4;
+        gridDataDebug.verticalSpan = 3;
 
-        List debugArea = new List(mShell, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL);
-        debugArea.setLayoutData(gridDataDebug);
+        mDebugArea = new List(mShell, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL);
+        mDebugArea.setLayoutData(gridDataDebug);
     }
 
     private static void configurePathsArea(){
         GridData comboGridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
         new Label(mShell, SWT.SIMPLE).setText("Local:");
-        new Combo(mShell, SWT.SIMPLE).setLayoutData(comboGridData);
+        mLocalDirectoryCombo = new Combo(mShell, SWT.SIMPLE);
+        mLocalDirectoryCombo.setLayoutData(comboGridData);
+
         new Label(mShell, SWT.SIMPLE).setText("SmartDrive:");
-        new Combo(mShell, SWT.SIMPLE).setLayoutData(comboGridData);
+        mSmartDriveDirectoryCombo = new Combo(mShell, SWT.SIMPLE);
+        mSmartDriveDirectoryCombo.setLayoutData(comboGridData);
+
+        mLocalDirectoryCombo.setItems(new String[]{});
+        mSmartDriveDirectoryCombo.setItems(new String[]{});
+
+        mLocalDirectoryCombo.add(PathsFactory.getPaths().getDefaultLocalRootDirectory());
+        mLocalDirectoryCombo.select(0);
+
+        mSmartDriveDirectoryCombo.add("SD:/");
+        mSmartDriveDirectoryCombo.select(0);
+
+        // selection listeners
+        mLocalDirectoryCombo.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent selectionEvent) {
+                String newPath = mLocalDirectoryCombo.getText();
+
+                for(int n = 0; n < mLocalDirectoryCombo.getItemCount(); n++){
+                    if(mLocalDirectoryCombo.getItem(n).equals(newPath))
+                        mLocalDirectoryCombo.remove(n);
+                }
+                mLocalDirectoryCombo.add(newPath, 0);
+                mLocalDirectoryCombo.select(0);
+                mSmartDriveController.changeLocalWorkingPath(newPath);
+            }
+
+            @Override
+            public void widgetDefaultSelected(SelectionEvent selectionEvent) {
+                String newPath = mLocalDirectoryCombo.getText();
+
+                for(int n = 0; n < mLocalDirectoryCombo.getItemCount(); n++){
+                    if(mLocalDirectoryCombo.getItem(n).equals(newPath))
+                        mLocalDirectoryCombo.remove(n);
+                }
+                mLocalDirectoryCombo.add(newPath, 0);
+                mLocalDirectoryCombo.select(0);
+                mSmartDriveController.changeLocalWorkingPath(newPath);
+            }
+        });
+        mSmartDriveDirectoryCombo.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent selectionEvent) {
+                String newPath = mSmartDriveDirectoryCombo.getText();
+
+                for(int n = 0; n < mSmartDriveDirectoryCombo.getItemCount(); n++){
+                    if(mSmartDriveDirectoryCombo.getItem(n).equals(newPath))
+                        mSmartDriveDirectoryCombo.remove(n);
+                }
+                mSmartDriveDirectoryCombo.add(newPath, 0);
+                mSmartDriveDirectoryCombo.select(0);
+                mSmartDriveController.changeSmartDriveWorkingPath(newPath);
+            }
+
+            @Override
+            public void widgetDefaultSelected(SelectionEvent selectionEvent) {
+                String newPath = mSmartDriveDirectoryCombo.getText();
+
+                for(int n = 0; n < mSmartDriveDirectoryCombo.getItemCount(); n++){
+                    if(mSmartDriveDirectoryCombo.getItem(n).equals(newPath))
+                        mSmartDriveDirectoryCombo.remove(n);
+                }
+                mSmartDriveDirectoryCombo.add(newPath, 0);
+                mSmartDriveDirectoryCombo.select(0);
+                mSmartDriveController.changeSmartDriveWorkingPath(newPath);
+            }
+        });
+
     }
 
     private static void configureTreeViewArea(){
         GridData treeGridDate = new GridData(GridData.FILL, GridData.FILL, true, true);
         treeGridDate.horizontalSpan = 2;
 
-        Tree localTree = new Tree(mShell, SWT.BORDER);
-        localTree.setLayoutData(treeGridDate);
 
-        Tree smartDriveTree = new Tree(mShell, SWT.BORDER);
-        smartDriveTree.setLayoutData(treeGridDate);
+        mLocalTree = new Tree(mShell, SWT.BORDER);
+        mLocalTree.setLayoutData(treeGridDate);
+
+        mSmartDriveTree = new Tree(mShell, SWT.BORDER);
+        mSmartDriveTree.setLayoutData(treeGridDate);
     }
 
     private static void configureTableArea(){
         GridData tableGridDate = new GridData(GridData.FILL, GridData.FILL, true, true);
         tableGridDate.horizontalSpan = 2;
+        tableGridDate.verticalSpan = 5;
+        tableGridDate.minimumHeight = 200;
 
-        Table localTable = new Table(mShell, SWT.BORDER);
-        localTable.setLayoutData(tableGridDate);
+        mLocalTable = new Table(mShell, SWT.BORDER);
+        mLocalTable.setLayoutData(tableGridDate);
+        TableColumn tlName = new TableColumn(mLocalTable, 0);
+        TableColumn tlSize = new TableColumn(mLocalTable, 0);
+        TableColumn tlType = new TableColumn(mLocalTable, 0);
+        TableColumn tlLastChange = new TableColumn(mLocalTable, 0);
+        tlName.setText("Name");
+        tlType.setText("Type");
+        tlSize.setText("Size");
+        tlLastChange.setText("Last Change");
+        tlName.setWidth(70);
+        tlSize.setWidth(70);
+        tlType.setWidth(70);
+        tlLastChange.setWidth(70);
+        mLocalTable.setHeaderVisible(true);
 
-        Table smartDriveTable = new Table(mShell, SWT.BORDER);
-        smartDriveTable.setLayoutData(tableGridDate);
+        mSmartDriveTable = new Table(mShell, SWT.BORDER);
+        mSmartDriveTable.setLayoutData(tableGridDate);
+        TableColumn tsName = new TableColumn(mSmartDriveTable, 0);
+        TableColumn tsSize = new TableColumn(mSmartDriveTable, 0);
+        TableColumn tsType = new TableColumn(mSmartDriveTable, 0);
+        TableColumn tsLastChange = new TableColumn(mSmartDriveTable, 0);
+        tsName.setText("Name");
+        tsSize.setText("Size");
+        tsType.setText("Type");
+        tsLastChange.setText("Last Change");
+        tsName.setWidth(70);
+        tsSize.setWidth(70);
+        tsType.setWidth(70);
+        tsLastChange.setWidth(70);
 
+        mSmartDriveTable.setHeaderVisible(true);
     }
 
     /**
@@ -135,7 +247,7 @@ public class MainWindow {
         // Main Window
         mShell = new Shell(mDisplay);
         mShell.setText(mSmartDriveController.getApplicationNameAndVersion());
-        mShell.setSize(800, 500);
+        mShell.setSize(800, 600);
 
         // 4 columns Window
         GridLayout layout = new GridLayout(4, false);
@@ -145,7 +257,7 @@ public class MainWindow {
         configureMenu();
 
         // Debug Area
-        configureDebugArea();
+        //configureDebugArea();
 
         // Paths area
         configurePathsArea();
@@ -172,5 +284,6 @@ public class MainWindow {
             }
         }
         mDisplay.dispose();
+        mSmartDriveController.endApplication(0);
     }
 }

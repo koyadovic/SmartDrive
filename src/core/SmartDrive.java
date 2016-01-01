@@ -1,6 +1,6 @@
 package core;
 
-import files.FileElement;
+import java.nio.file.Path;
 
 /**
  * Created by user on 21/10/15.
@@ -8,16 +8,21 @@ import files.FileElement;
 public interface SmartDrive {
     String CONFIGURATION_ROOT_LOCAL_DIRECTORY_FOR_SMARTDRIVE = "root_local_directory";
 
-    String CONFIGURATION_LAST_LOCAL_DIRECTORY = "last_local_directory";
-    String CONFIGURATION_LAST_SMARTDRIVE_DIRECTORY = "last_smartdrive_directory";
+    String CONFIGURATION_LAST_LOCAL_WORKING_PATH = "last_local_working_path";
+    String CONFIGURATION_LAST_SMARTDRIVE_WORKING_PATH = "last_smartdrive_working_path";
 
-    void copyFileElement(FileElement target, FileElement destination);
-    void moveFileElement(FileElement target, FileElement destination);
-    void deleteFileElement(FileElement target);
-    void createDirectory(FileElement target);
+    void copy(Path source, Path destination);
+    void move(Path source, Path destination);
+    void remove(Path target);
+    void mkdir(Path target);
 
-    FileElement getCurrentLocalDirectory();
-    FileElement getCurrentSmartDriveDirectory();
+    void changeLocalWorkingPath(String newPath);
+    void changeSmartDriveWorkingPath(String newPath);
+    void changeLocalWorkingPath(Path newPath);
+    void changeSmartDriveWorkingPath(Path newPath);
+
+    Path getLocalWorkingPath();
+    Path getSmartDriveWorkingPath();
 
     void startApplication();
     void endApplication(int status);

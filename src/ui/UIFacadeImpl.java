@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Shell;
  * Created by user on 28/10/15.
  */
 public class UIFacadeImpl implements UIFacade {
+    private SmartDrive mSmartDriveController;
 
     /*
      Main field for the progress bar
@@ -48,7 +49,11 @@ public class UIFacadeImpl implements UIFacade {
     public void fatalError(String title, String message) {
         DialogError.show(title, message);
         finishUI();
-        System.exit(1);
+
+        if(mSmartDriveController != null)
+            mSmartDriveController.endApplication(1);
+        else
+            System.exit(1);
     }
 
     @Override
@@ -103,5 +108,6 @@ public class UIFacadeImpl implements UIFacade {
     @Override
     public void setApplicationController(SmartDrive controller) {
         MainWindow.setApplicationController(controller);
+        mSmartDriveController = controller;
     }
 }

@@ -1,4 +1,4 @@
-package fsmanager;
+package workmanager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,19 +6,19 @@ import java.util.List;
 /**
  * Created by user on 20/10/15.
  */
-public abstract class ManagerOperationAbstract implements ManagerOperation {
-    private int mStatus = ManagerOperation.STATUS_IDLE;
+public abstract class WorkAbstract implements Work {
+    private int mStatus = Work.STATUS_IDLE;
     private String mStatusText = "";
 
-    private List<OperationObserver> mObservers = new ArrayList<>();
+    private List<WorkObserver> mObservers = new ArrayList<>();
 
     @Override
-    public void addOperationObserver(OperationObserver observer) {
+    public void addOperationObserver(WorkObserver observer) {
         mObservers.add(observer);
     }
 
     @Override
-    public void removeOperationObserver(OperationObserver observer) {
+    public void removeOperationObserver(WorkObserver observer) {
         mObservers.remove(observer);
     }
 
@@ -26,24 +26,24 @@ public abstract class ManagerOperationAbstract implements ManagerOperation {
      This three methods, can be called for the extended classes to notify to user interface some information.
      */
     protected void notifyStart(){
-        mStatus = ManagerOperation.STATUS_STARTING;
+        mStatus = Work.STATUS_STARTING;
 
-        for(OperationObserver o : mObservers)
+        for(WorkObserver o : mObservers)
             o.notifyStart(this);
     }
 
     protected void notifyProgress(int current, int total){
-        mStatus = ManagerOperation.STATUS_WORKING;
+        mStatus = Work.STATUS_WORKING;
 
-        for(OperationObserver o : mObservers)
+        for(WorkObserver o : mObservers)
             o.notifyProgress(this, current, total);
     }
 
 
     protected void notifyEnd(){
-        mStatus = ManagerOperation.STATUS_FINALIZED;
+        mStatus = Work.STATUS_FINALIZED;
 
-        for(OperationObserver o : mObservers)
+        for(WorkObserver o : mObservers)
             o.notifyEnd(this);
     }
 
@@ -57,5 +57,5 @@ public abstract class ManagerOperationAbstract implements ManagerOperation {
         return mStatusText;
     }
 
-    public abstract void operate();
+    public abstract void doIt();
 }

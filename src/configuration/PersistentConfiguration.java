@@ -5,11 +5,12 @@ package configuration;
  *
  * As a Singleton
  */
-public class ConfigurationFactory {
+public class PersistentConfiguration {
 
-    private ConfigurationFactory(){}
+    private PersistentConfiguration(){}
 
     public static Configuration getConfiguration() {
         return new ConfigurationImpl();
     }
+
 }

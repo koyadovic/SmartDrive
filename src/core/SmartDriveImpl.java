@@ -1,17 +1,19 @@
 package core;
 
 import configuration.Configuration;
-import configuration.ConfigurationFactory;
-import files.FileElement;
-import fsmanager.FilesystemManager;
-import fsmanager.FilesystemManagerFactory;
-import fsmanager.ManagerOperation;
-import fsmanager.ManagerOperationBuilder;
+import configuration.PersistentConfiguration;
 import ui.UIFacade;
 import ui.UIFacadeSingleton;
+import workmanager.Work;
+import workmanager.WorkManager;
+import workmanager.WorkManagerFactory;
+import workmanager.WorkOperationBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * Created by user on 20/10/15.
@@ -19,17 +21,18 @@ import java.io.IOException;
 public class SmartDriveImpl implements SmartDrive {
     private static final String APPLICATION_NAME = "SmartDrive";
     private static final String APPLICATION_VERSION = "v0.1";
+
     private UIFacade mUI;
-    private FilesystemManager mManager;
+    private WorkManager mManager;
     private Configuration mConfiguration;
 
-    private FileElement mCurrentLocalDirectory;
-    private FileElement mCurrentSmartDriveDirectory;
+    private Path mCurrentLocalPath;
+    private Path mCurrentSmartDriveDirectory;
 
     protected SmartDriveImpl(){
         mUI = UIFacadeSingleton.getUIFacade();
-        mManager = FilesystemManagerFactory.getFilesystemManager();
-        mConfiguration = ConfigurationFactory.getConfiguration();
+        mManager = WorkManagerFactory.getFilesystemManager();
+        mConfiguration = PersistentConfiguration.getConfiguration();
 
         if(mConfiguration.isCreatedForTheFirstTime()||mConfiguration.getStringValue(SmartDrive.CONFIGURATION_ROOT_LOCAL_DIRECTORY_FOR_SMARTDRIVE, "").equals(""))
             getRootSmartDriveDirectory();
@@ -42,50 +45,68 @@ public class SmartDriveImpl implements SmartDrive {
      * Here we must translate UI request into concrete FilesystemOperation's
      */
     @Override
-    public void copyFileElement(FileElement target, FileElement destination) {
-        if(! destination.isDirectory()) {
+    public void copy(Path source, Path destination) {
+        if(Files.isDirectory(source) && !Files.isDirectory(destination)) {
             mUI.error("Error", "Destination must be a directory");
-
         } else {
-            ManagerOperation operation = ManagerOperationBuilder.getCopyOperation(target, destination);
-            mManager.operate(operation);
+            Work operation = WorkOperationBuilder.getCopyOperation(source, destination);
+            mManager.work(operation);
         }
     }
 
     @Override
-    public void moveFileElement(FileElement target, FileElement destination) {
-        if(!target.isFile() && destination.isFile()) {
+    public void move(Path source, Path destination) {
+        if(Files.isDirectory(source) && !Files.isDirectory(destination)) {
             mUI.error("Error", "Destination must be a directory");
-
         } else {
-            ManagerOperation operation = ManagerOperationBuilder.getMoveOperation(target, destination);
-            mManager.operate(operation);
+            Work operation = WorkOperationBuilder.getMoveOperation(source, destination);
+            mManager.work(operation);
         }
     }
 
     @Override
-    public void deleteFileElement(FileElement target) {
-        if(target.exists()) {
-            ManagerOperation operation = ManagerOperationBuilder.getDeleteOperation(target);
-            mManager.operate(operation);
+    public void remove(Path target) {
+        if(Files.exists(target)) {
+            Work operation = WorkOperationBuilder.getDeleteOperation(target);
+            mManager.work(operation);
         }
     }
 
     @Override
-    public void createDirectory(FileElement target) {
-        if(!target.exists()) {
-            ManagerOperation operation = ManagerOperationBuilder.getCreateDirectoryOperation(target);
-            mManager.operate(operation);
+    public void mkdir(Path target) {
+        if(!Files.exists(target)) {
+            Work operation = WorkOperationBuilder.getCreateDirectoryOperation(target);
+            mManager.work(operation);
         }
     }
 
     @Override
-    public FileElement getCurrentLocalDirectory() {
-        return mCurrentLocalDirectory;
+    public void changeLocalWorkingPath(String newPath) {
+        mCurrentLocalPath = FileSystems.getDefault().getPath(newPath);
     }
 
     @Override
-    public FileElement getCurrentSmartDriveDirectory() {
+    public void changeSmartDriveWorkingPath(String newPath) {
+        //todo mCurrentSmartDriveDirectory = new SDPath()
+    }
+
+    @Override
+    public void changeLocalWorkingPath(Path newPath) {
+        mCurrentLocalPath = newPath;
+    }
+
+    @Override
+    public void changeSmartDriveWorkingPath(Path newPath) {
+        mCurrentSmartDriveDirectory = newPath;
+    }
+
+    @Override
+    public Path getLocalWorkingPath() {
+        return mCurrentLocalPath;
+    }
+
+    @Override
+    public Path getSmartDriveWorkingPath() {
         return mCurrentSmartDriveDirectory;
     }
 
@@ -97,7 +118,7 @@ public class SmartDriveImpl implements SmartDrive {
     @Override
     public void endApplication(int status) {
         mUI.finishUI();
-        System.exit(1);
+        System.exit(status);
     }
 
     private void getRootSmartDriveDirectory(){

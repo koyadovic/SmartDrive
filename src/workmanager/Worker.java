@@ -1,16 +1,16 @@
-package fsmanager;
+package workmanager;
 
 import java.util.Queue;
 
 /**
  * Created by user on 20/10/15.
  */
-public class FilesystemWorker implements Runnable {
+public class Worker implements Runnable {
 
-    private final Queue<ManagerOperation> mOperationQueue;
-    private final FilesystemManagerImpl mManager;
+    private final Queue<Work> mOperationQueue;
+    private final WorkManagerImpl mManager;
 
-    protected FilesystemWorker(FilesystemManagerImpl manager, Queue<ManagerOperation> operationQueue){
+    protected Worker(WorkManagerImpl manager, Queue<Work> operationQueue){
         this.mOperationQueue = operationQueue;
         this.mManager = manager;
     }
@@ -19,7 +19,6 @@ public class FilesystemWorker implements Runnable {
     public void run() {
         while (true) {
             consume();
-
             try {
                 synchronized (mOperationQueue) {
                     mOperationQueue.wait();
@@ -33,13 +32,13 @@ public class FilesystemWorker implements Runnable {
 
     private void consume() {
         while (!mOperationQueue.isEmpty()) {
-            ManagerOperation op = mOperationQueue.poll();
+            Work op = mOperationQueue.poll();
 
             if (op != null) {
                 // do it and publish the start, progress and end to manager but only if the operation requires it ...
                 // if not, this methods won't be called.
 
-                op.operate();
+                op.doIt();
 
             }
         }

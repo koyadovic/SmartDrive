@@ -1,5 +1,5 @@
 
-import core.SmartDriveFactory;
+import core.SmartDriveApp;
 
 /**
  * Created by user on 21/10/15.
@@ -9,8 +9,23 @@ import core.SmartDriveFactory;
 public class Main {
     public static void main(String[] args){
 
-        SmartDriveFactory .getAppInstance()
+        SmartDriveApp.getInstance()
                           .startApplication();
+
+//        SDFileSystemProvider provider = new SDFileSystemProvider();
+//
+//        URI uri = URI.create("sd:/");
+//        Map<String, String> env = new HashMap<>();
+//        env.put("create", "true");
+//
+//        try {
+//            FileSystem localFS = FileSystems.getDefault();
+//            FileSystem smartDriveFS = provider.newFileSystem(uri, env);
+//
+//
+//        } catch (IOException e){
+//
+//        }
 
     }
 }

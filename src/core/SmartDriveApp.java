@@ -4,9 +4,9 @@ package core;
 /**
  * Created by user on 21/10/15.
  */
-public class SmartDriveFactory {
+public class SmartDriveApp {
 
-    public static SmartDrive getAppInstance(){
+    public static SmartDrive getInstance(){
         return new SmartDriveImpl();
     }
 }
